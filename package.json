@@ -1,0 +1,26 @@
+{
+  "name": "price_report",
+  "version": "1.0.0",
+  "description": "A Seneca price report microservice",
+  "main": "service.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yentsun/price_report.git"
+  },
+  "keywords": [
+    "seneca",
+    "microservice"
+  ],
+  "author": "Max Korinets",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yentsun/price_report/issues"
+  },
+  "homepage": "https://github.com/yentsun/price_report#readme"
+}
