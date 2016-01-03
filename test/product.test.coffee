@@ -18,7 +18,7 @@ describe 'parse', () ->
 
     it 'parses product package', (done) ->
         product.parse
-            title: 'Молоко Great Milk three 1L'
+            title: 'Great Milk three 1L'
         , (error, data) ->
                 assert.equal data.package, '1 l'
                 do done

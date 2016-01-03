@@ -22,7 +22,7 @@
   describe('parse', function() {
     return it('parses product package', function(done) {
       return product.parse({
-        title: 'Молоко Great Milk three 1L'
+        title: 'Great Milk three 1L'
       }, function(error, data) {
         assert.equal(data["package"], '1 l');
         return done();
