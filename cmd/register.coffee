@@ -7,19 +7,20 @@ module.exports = (seneca, options) ->
     cmd_register = (args, respond) ->
         try
             price_value = validator.toFloat args.price_value
-            throw new Error 'price value not valid' if not validator.isFloat price_value
+            throw new Error 'price value invalid' if not validator.isFloat price_value
 
             product_title = validator.trim args.product_title
-            throw new Error 'product title is invalid' if not product_title
+            seneca.log.debug 'product title is', product_title
+            throw new Error 'product title invalid' if not product_title
 
             merchant_id = validator.trim args.merchant_id
-            throw new Error 'merchant_id is invalid' if not merchant_id
+            throw new Error 'merchant id invalid' if not merchant_id
 
             reporter_id = validator.trim args.reporter_id
-            throw new Error 'reporter_id is invalid' if not reporter_id
+            throw new Error 'reporter id invalid' if not reporter_id
 
             url = validator.trim args.url
-            throw new Error 'url is invalid' if not url
+            throw new Error 'url invalid' if not url
 
             sku = validator.trim args.sku
 

@@ -15,23 +15,24 @@
       try {
         price_value = validator.toFloat(args.price_value);
         if (!validator.isFloat(price_value)) {
-          throw new Error('price value not valid');
+          throw new Error('price value invalid');
         }
         product_title = validator.trim(args.product_title);
+        seneca.log.debug('product title is', product_title);
         if (!product_title) {
-          throw new Error('product title is invalid');
+          throw new Error('product title invalid');
         }
         merchant_id = validator.trim(args.merchant_id);
         if (!merchant_id) {
-          throw new Error('merchant_id is invalid');
+          throw new Error('merchant id invalid');
         }
         reporter_id = validator.trim(args.reporter_id);
         if (!reporter_id) {
-          throw new Error('reporter_id is invalid');
+          throw new Error('reporter id invalid');
         }
         url = validator.trim(args.url);
         if (!url) {
-          throw new Error('url is invalid');
+          throw new Error('url invalid');
         }
         sku = validator.trim(args.sku);
       } catch (error1) {

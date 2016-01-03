@@ -22,7 +22,7 @@
   });
 
   describe('register', function() {
-    return it('registers a new price report', function(done) {
+    it('registers a new price report', function(done) {
       return report.register({
         product_title: 'Молоко Great Milk three 1L',
         price_value: '42.6',
@@ -36,6 +36,71 @@
         assert.equal(report.merchant_id, "Scotty's grocery 2");
         assert.equal(report.reporter_id, 'Jill');
         assert.equal(report.date_time, moment().format());
+        return done();
+      });
+    });
+    it('fails if price value is invalid', function(done) {
+      return report.register({
+        product_title: 'Молоко Great Milk three 1L',
+        price_value: 'nope',
+        url: 'http://scottys2.com/products/milk/1',
+        merchant_id: "Scotty's grocery 2",
+        reporter_id: 'Jill'
+      }, function(error, report) {
+        assert.isNull(report);
+        assert.include(error.message, 'price value invalid');
+        return done();
+      });
+    });
+    it('fails if product title is invalid', function(done) {
+      return report.register({
+        product_title: '',
+        price_value: '123',
+        url: 'http://scottys2.com/products/milk/1',
+        merchant_id: "Scotty's grocery 2",
+        reporter_id: 'Jill'
+      }, function(error, report) {
+        assert.isNull(report);
+        assert.include(error.message, 'product title invalid');
+        return done();
+      });
+    });
+    it('fails if merchant id is invalid', function(done) {
+      return report.register({
+        product_title: 'Молоко Great Milk three 1L',
+        price_value: '123',
+        url: 'http://scottys2.com/products/milk/1',
+        merchant_id: "",
+        reporter_id: 'Jill'
+      }, function(error, report) {
+        assert.isNull(report);
+        assert.include(error.message, 'merchant id invalid');
+        return done();
+      });
+    });
+    it('fails if reporter id is invalid', function(done) {
+      return report.register({
+        product_title: 'Молоко Great Milk three 1L',
+        price_value: '123',
+        url: 'http://scottys2.com/products/milk/1',
+        merchant_id: "Scotty's grocery 2",
+        reporter_id: ''
+      }, function(error, report) {
+        assert.isNull(report);
+        assert.include(error.message, 'reporter id invalid');
+        return done();
+      });
+    });
+    return it('fails if url is invalid', function(done) {
+      return report.register({
+        product_title: 'Молоко Great Milk three 1L',
+        price_value: '123',
+        url: '',
+        merchant_id: "Scotty's grocery 2",
+        reporter_id: 'Jill'
+      }, function(error, report) {
+        assert.isNull(report);
+        assert.include(error.message, 'url invalid');
         return done();
       });
     });
