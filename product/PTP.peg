@@ -1,6 +1,6 @@
 start =
-    w:word+ p:package
-        {return {words: w, package:p}}
+    w:word* p:package rw:word*
+        {return {words: w.concat(rw), package:p}}
 
 spaced_word =
     " " w:word
