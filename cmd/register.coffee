@@ -28,6 +28,8 @@ module.exports = (seneca, options) ->
             seneca.log.error 'new report failed:', error.message
             respond error, null
 
+        # TODO calculate normalized price
+
         seneca.make 'price_report',
             uuid: do uuid.v4
             price_value: price_value

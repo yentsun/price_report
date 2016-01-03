@@ -1,0 +1,48 @@
+start =
+    w:word+ p:package
+        {return {words: w, package:p}}
+
+spaced_word =
+    " " w:word
+        {return w}
+
+spaced_package =
+    " " p:package
+        {return p}
+
+package =
+    a:integer v:volume
+        {return a+" "+v}
+    / a:float v:volume
+        {return a+" "+v}
+    / spaced_package
+
+amount_separator =
+    " "
+    /""
+
+
+volume =
+    amount_separator "l"
+    / amount_separator "L"
+        {return "l"}
+
+float =
+    i:integer "." d:digit+
+        {return parseFloat(i + "." + d.join(""))}
+
+integer =
+    f:[1-9] rest:digit*
+        {return ""+f+rest.join("")}
+    / "0"
+
+digit =
+    [0-9]
+
+word =
+    f:alpha r:alpha+
+        {return "" + f + r.join("")}
+    / spaced_word
+
+alpha =
+    [a-zA-Z/./,]
