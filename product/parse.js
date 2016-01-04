@@ -11,13 +11,30 @@
   module.exports = function(seneca, options) {
     var cmd_parse;
     cmd_parse = function(args, respond) {
-      var grammar, parser, path_to_grammar, result;
+      var grammar, i, len, object, objects, parser, path_to_grammar, result;
       path_to_grammar = path.join(__dirname, 'PTP.peg');
       grammar = fs.readFileSync(path_to_grammar, {
         encoding: 'utf-8'
       });
       parser = PEG.buildParser(grammar);
-      result = parser.parse(args.title);
+      objects = parser.parse(args.title.toLowerCase());
+      result = {
+        origin: args.title,
+        words: []
+      };
+      for (i = 0, len = objects.length; i < len; i++) {
+        object = objects[i];
+        if ('word' in object) {
+          result.words.push(object.word);
+        }
+        if ('package' in object) {
+          result["package"] = object["package"];
+        }
+        if ('percentage' in object) {
+          result.percentage = object.percentage;
+        }
+      }
+      result.title = result.words.join(' ');
       return respond(null, result);
     };
     return cmd_parse;

@@ -1,3 +1,5 @@
+// Product Title Parser
+
 start =
     object*
 

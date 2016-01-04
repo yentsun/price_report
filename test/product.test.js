@@ -22,9 +22,13 @@
   describe('parse', function() {
     return it('parses product package', function(done) {
       return product.parse({
-        title: 'Great Milk three 1L'
+        title: 'Молоко Great Milk 3% 1L'
       }, function(error, data) {
-        assert.equal(data["package"], '1 l');
+        assert.equal(data.origin, 'Молоко Great Milk 3% 1L');
+        assert.equal(data.title, 'молоко great milk');
+        assert.equal(data["package"].amount, 1);
+        assert.equal(data["package"].unit, "l");
+        assert.equal(data.percentage, 3);
         return done();
       });
     });

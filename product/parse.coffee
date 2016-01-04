@@ -9,7 +9,18 @@ module.exports = (seneca, options) ->
         grammar = fs.readFileSync path_to_grammar,
             encoding: 'utf-8'
         parser = PEG.buildParser grammar
-        result = parser.parse args.title
+        objects = parser.parse do args.title.toLowerCase
+        result =
+            origin: args.title
+            words: []
+        for object in objects
+            if 'word' of object
+                result.words.push object.word
+            if 'package' of object
+                result.package = object.package
+            if 'percentage' of object
+                result.percentage = object.percentage
+        result.title = result.words.join ' '
         respond null, result
 
     cmd_parse
