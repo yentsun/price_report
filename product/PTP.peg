@@ -10,13 +10,25 @@ separated_object =
 object =
     p:percentage {return {percentage: p}}
     / p:package {return {package: p}}
+    / cp:composite_package {return {package: cp}}
     / w:word {return {word: w}}
     / t:title {return {title: t}}
     / separated_object
 
+composite_package =
+    separator* p1:package plus p2:package {return {amount: p1.amount + p2.amount, unit: p1.unit}}
+    / separator* i:integer asterisk p:package {return {amount: i * p.amount, unit: p.unit}}
+    / separator* p:package asterisk i:integer separator* pieces {return {amount: i * p.amount, unit: p.unit}}
+
 package =
-    a:amount u:unit
-        {return {amount: a, unit: u}}
+    a:amount u:unit {return {amount: a, unit: u}}
+
+plus =
+    separator* "+" separator*
+
+asterisk =
+    separator* "*" separator*
+    / separator* "x" separator*
 
 percentage =
    p:amount unit_separator "%" {return p}
@@ -33,12 +45,12 @@ range =
     min:amount "-" max:amount {return [min, max]}
 
 amount =
-    float
-    / integer
+    f:float {return parseFloat(f)}
+    / i:integer {return parseInt(i)}
 
 unit_separator =
     " "
-    /""
+    / ""
 
 unit =
     unit_separator u:unit_token
@@ -57,12 +69,15 @@ unit_token =
 
     / "kg"
 
-    / "шт" {return "pcs"}
+    / pieces
 
+pieces =
+    "pcs"
+    / "шт" {return "pcs"}
 
 float =
     i:integer float_separator d:digit+
-        {return parseFloat(i + "." + d.join(""))}
+        {return i + "." + d.join("")}
 
 float_separator =
     "."

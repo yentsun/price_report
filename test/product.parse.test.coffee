@@ -56,3 +56,30 @@ describe 'parse', () ->
                 assert.equal data.package.unit, "l"
                 assert.equal data.percentage, 1
                 do done
+
+    it 'parses a composite package title', (done) ->
+        product.parse
+            title: 'Молоко пастериз.1% 1л + 0,5л Лосево'
+        , (error, data) ->
+                assert.equal data.package.amount, 1.5
+                assert.equal data.package.unit, "l"
+                assert.equal data.percentage, 1
+                do done
+
+    it 'parses a multi package title', (done) ->
+        product.parse
+            title: 'Молоко пастериз.1% 12 * 1л Лосево'
+        , (error, data) ->
+                assert.equal data.package.amount, 12
+                assert.equal data.package.unit, "l"
+                assert.equal data.percentage, 1
+                do done
+
+    it 'parses another multi package title', (done) ->
+        product.parse
+            title: 'Молоко пастериз.1% 200мл x 4 шт Лосево'
+        , (error, data) ->
+                assert.equal data.package.amount, 800
+                assert.equal data.package.unit, "ml"
+                assert.equal data.percentage, 1
+                do done

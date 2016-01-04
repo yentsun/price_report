@@ -55,12 +55,42 @@
         return done();
       });
     });
-    return it('parses a messy milk title', function(done) {
+    it('parses a messy milk title', function(done) {
       return product.parse({
         title: 'Молоко пастериз.1% 1л Лосево'
       }, function(error, data) {
         assert.equal(data["package"].amount, 1);
         assert.equal(data["package"].unit, "l");
+        assert.equal(data.percentage, 1);
+        return done();
+      });
+    });
+    it('parses a composite package title', function(done) {
+      return product.parse({
+        title: 'Молоко пастериз.1% 1л + 0,5л Лосево'
+      }, function(error, data) {
+        assert.equal(data["package"].amount, 1.5);
+        assert.equal(data["package"].unit, "l");
+        assert.equal(data.percentage, 1);
+        return done();
+      });
+    });
+    it('parses a multi package title', function(done) {
+      return product.parse({
+        title: 'Молоко пастериз.1% 12 * 1л Лосево'
+      }, function(error, data) {
+        assert.equal(data["package"].amount, 12);
+        assert.equal(data["package"].unit, "l");
+        assert.equal(data.percentage, 1);
+        return done();
+      });
+    });
+    return it('parses another multi package title', function(done) {
+      return product.parse({
+        title: 'Молоко пастериз.1% 200мл x 4 шт Лосево'
+      }, function(error, data) {
+        assert.equal(data["package"].amount, 800);
+        assert.equal(data["package"].unit, "ml");
         assert.equal(data.percentage, 1);
         return done();
       });
