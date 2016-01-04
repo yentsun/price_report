@@ -1,35 +1,70 @@
 start =
-    w:word* p:package rw:word*
-        {return {words: w.concat(rw), package:p}}
+    object*
 
-spaced_word =
-    " " w:word
-        {return w}
+separated_object =
+    separator o:object
+        {return o}
 
-spaced_package =
-    " " p:package
-        {return p}
+object =
+    p:percentage {return {percentage: p}}
+    / p:package {return {package: p}}
+    / w:word {return {word: w}}
+    / t:title {return {title: t}}
+    / separated_object
 
 package =
-    a:integer v:volume
-        {return a+" "+v}
-    / a:float v:volume
-        {return a+" "+v}
-    / spaced_package
+    a:amount u:unit
+        {return {amount: a, unit: u}}
 
-amount_separator =
+percentage =
+   p:amount unit_separator "%" {return p}
+   / r:range unit_separator "%" {return r}
+   / from min:percentage to max:percentage {return [min, max]}
+
+from =
+    separator* "от" separator*
+
+to =
+    separator* "до" separator*
+
+range =
+    min:amount "-" max:amount {return [min, max]}
+
+amount =
+    float
+    / integer
+
+unit_separator =
     " "
     /""
 
+unit =
+    unit_separator u:unit_token
+        {return u}
 
-volume =
-    amount_separator "l"
-    / amount_separator "L"
-        {return "l"}
+unit_token =
+    "l"
+    / "л" {return "l"}
+
+    / "ml"
+    / "мл" {return "ml"}
+
+    / "g"
+    / "гр" {return "g"}
+    / "г" {return "g"}
+
+    / "kg"
+
+    / "шт" {return "pcs"}
+
 
 float =
-    i:integer "." d:digit+
+    i:integer float_separator d:digit+
         {return parseFloat(i + "." + d.join(""))}
+
+float_separator =
+    "."
+    / ","
 
 integer =
     f:[1-9] rest:digit*
@@ -39,10 +74,21 @@ integer =
 digit =
     [0-9]
 
+title =
+    '"' f:word separator* r:word* '"' {return f+" "+r.join(" ")}
+
 word =
-    f:alpha r:alpha+
+    f:word_start r:alpha*
         {return "" + f + r.join("")}
-    / spaced_word
+
+word_start =
+    [a-z\u0430-\u044F]
 
 alpha =
-    [a-zA-Z/./,]
+    [a-z\u0430-\u044F\\\/]
+
+separator =
+    ". "
+    / ", "
+    / " "
+    / "."
