@@ -85,13 +85,52 @@
         return done();
       });
     });
-    return it('parses another multi package title', function(done) {
+    it('parses another multi package title', function(done) {
       return product.parse({
         title: 'Молоко пастериз.1% 200мл x 4 шт Лосево'
       }, function(error, data) {
         assert.equal(data["package"].amount, 800);
         assert.equal(data["package"].unit, "ml");
         assert.equal(data.percentage, 1);
+        return done();
+      });
+    });
+    it('parses amount range', function(done) {
+      return product.parse({
+        title: 'яблоки сезонные 2,3-2,5кг'
+      }, function(error, data) {
+        assert.equal(data["package"].amount[0], 2.3);
+        assert.equal(data["package"].amount[1], 2.5);
+        assert.equal(data["package"].unit, "kg");
+        assert.isUndefined(data.percentage);
+        return done();
+      });
+    });
+    it('parses amount range with zeroes in floats', function(done) {
+      return product.parse({
+        title: 'яблоки сезонные 0,6-0,95кг'
+      }, function(error, data) {
+        assert.equal(data["package"].amount[0], 0.6);
+        assert.equal(data["package"].amount[1], 0.95);
+        assert.equal(data["package"].unit, "kg");
+        return done();
+      });
+    });
+    it('parses `unitless` package with `pcs` unit', function(done) {
+      return product.parse({
+        title: 'Яйцо Окское куриное СВ белое 1х20'
+      }, function(error, data) {
+        assert.equal(data["package"].amount, 20);
+        assert.equal(data["package"].unit, "pcs");
+        return done();
+      });
+    });
+    return it('parses `word` package with `pcs` unit and with whitespace at the end', function(done) {
+      return product.parse({
+        title: 'яйцо окское куриное св десяток белое '
+      }, function(error, data) {
+        assert.equal(data["package"].amount, 10);
+        assert.equal(data["package"].unit, "pcs");
         return done();
       });
     });

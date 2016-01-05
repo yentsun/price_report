@@ -22,13 +22,15 @@ composite_package =
 
 package =
     a:amount u:unit {return {amount: a, unit: u}}
+    / r:range u:unit {return {amount: r, unit: u}}
+    / i1:integer asterisk i2:integer {return {amount: i1 * i2, unit: "pcs"}}
+    / separator* "десяток" separator* {return {amount: 10, unit: "pcs"}}
 
 plus =
     separator* "+" separator*
 
 asterisk =
-    separator* "*" separator*
-    / separator* "x" separator*
+    separator* [\*xх] separator*
 
 percentage =
    p:amount unit_separator "%" {return p}
@@ -68,6 +70,7 @@ unit_token =
     / "г" {return "g"}
 
     / "kg"
+    / "кг" {return "kg"}
 
     / pieces
 

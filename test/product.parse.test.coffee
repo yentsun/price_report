@@ -83,3 +83,38 @@ describe 'parse', () ->
                 assert.equal data.package.unit, "ml"
                 assert.equal data.percentage, 1
                 do done
+
+    it 'parses amount range', (done) ->
+        product.parse
+            title: 'яблоки сезонные 2,3-2,5кг'
+        , (error, data) ->
+                assert.equal data.package.amount[0], 2.3
+                assert.equal data.package.amount[1], 2.5
+                assert.equal data.package.unit, "kg"
+                assert.isUndefined data.percentage
+                do done
+
+    it 'parses amount range with zeroes in floats', (done) ->
+        product.parse
+            title: 'яблоки сезонные 0,6-0,95кг'
+        , (error, data) ->
+                assert.equal data.package.amount[0], 0.6
+                assert.equal data.package.amount[1], 0.95
+                assert.equal data.package.unit, "kg"
+                do done
+
+    it 'parses `unitless` package with `pcs` unit', (done) ->
+        product.parse
+            title: 'Яйцо Окское куриное СВ белое 1х20'
+        , (error, data) ->
+                assert.equal data.package.amount, 20
+                assert.equal data.package.unit, "pcs"
+                do done
+
+    it 'parses `word` package with `pcs` unit and with whitespace at the end', (done) ->
+        product.parse
+            title: 'яйцо окское куриное св десяток белое '
+        , (error, data) ->
+                assert.equal data.package.amount, 10
+                assert.equal data.package.unit, "pcs"
+                do done

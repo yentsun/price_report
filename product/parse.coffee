@@ -1,8 +1,12 @@
+validator = require 'validator'
+
 module.exports = (seneca, options) ->
 
     cmd_parse = (args, respond) ->
         parser = options.parser
-        objects = parser.parse do args.title.toLowerCase
+        title = validator.trim do args.title.toLowerCase
+        objects = parser.parse title
+
         result =
             origin: args.title
             words: []
